@@ -1,0 +1,99 @@
+﻿@model IEnumerable<ApplicationLogs>
+
+@{
+    ViewData["Title"] = "Application Logs";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Application Logs</h2>
+
+    <!-- Search and Filter Row -->
+    <div class="row mb-3 align-items-end">
+        <div class="col-md-6">
+            @* <label for="logSearch" class="form-label">Search Logs</label> *@
+            <input type="text" id="logSearch" class="form-control" placeholder="Search by Message or Level...">
+        </div>
+
+        <div class="col-md-6 d-flex justify-content-end gap-2">
+            <div>
+                @* <label for="dateFilter" class="form-label">Filter by Date</label> *@
+                <input type="date" id="dateFilter" class="form-control">
+            </div>
+            <div>
+                @* <label class="form-label d-block invisible">Refresh</label> *@
+                <button id="refreshBtn" class="btn btn-outline-primary">
+                    <i class="bi bi-arrow-clockwise"></i> Refresh
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logs Table -->
+    <div class="table-responsive">
+        <table id="logsTable" class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Message</th>
+                    <th>Timestamp</th>
+                    <th>Exception</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var log in Model)
+                {
+                    <tr>
+                        <td>@log.Message</td>
+                        <td>@log.TimeStamp.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                        <td>
+                            @* @if (!string.IsNullOrWhiteSpace(log.Exception))
+                            {
+                                <button class="btn btn-sm btn-outline-danger" data-bs-toggle="collapse" data-bs-target="#ex-@log.Id">View</button>
+                                <div id="ex-@log.Id" class="collapse mt-2">
+                                    <pre class="bg-light p-2 rounded">@log.Exception</pre>
+                                </div>
+
+                            } *@
+                            <a class="btn btn-sm btn-outline-danger" asp-action="@nameof(LogController.Details)" asp-route-id="@log.Id">View</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Search by message or level
+        document.getElementById('logSearch').addEventListener('input', filterLogs);
+
+        // Filter by date
+        document.getElementById('dateFilter').addEventListener('change', filterLogs);
+
+        // Refresh button
+        document.getElementById('refreshBtn').addEventListener('click', function () {
+            location.reload(); // reloads the page
+        });
+
+        function filterLogs() {
+            const keyword = document.getElementById('logSearch').value.toLowerCase();
+            const selectedDate = document.getElementById('dateFilter').value;
+            const rows = document.querySelectorAll('#logsTable tbody tr');
+
+            rows.forEach(row => {
+                const message = row.cells[0].innerText.toLowerCase();
+                //const level = row.cells[2].innerText.toLowerCase();
+                const timestamp = row.cells[1].innerText.substring(0, 10); // yyyy-MM-dd
+
+                const matchesKeyword = message.includes(keyword);
+                const matchesDate = !selectedDate || timestamp === selectedDate;
+
+                if (matchesKeyword && matchesDate) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+    </script>
+}
