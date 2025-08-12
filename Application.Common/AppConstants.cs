@@ -2,8 +2,11 @@
 {
     public class AppConstants
     {
+        #region INTERNAL KEYS
         public const string ApplicationLogKey = "ApplicationLog";
         public const string AppConnectionStringKey = "AppConnectionString";
+
+        #endregion INTERNAL KEYS
 
         #region VIEW PATH CONSTANTS
 
