@@ -23,8 +23,6 @@
 
         #region EXTERNAL APIs OR KEYS
         
-        public const string LogflareSourceId = "b32c79e7-5485-4119-b74f-454954737e81";
-        public const string LogflareAPIKey = "tLQx79ook8iT";
 
         #endregion
     }
