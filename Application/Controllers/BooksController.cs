@@ -32,6 +32,19 @@ namespace Application.Controllers
             }
         }
 
+        public async Task<IActionResult> GetBooksTable()
+        {
+            try
+            {
+                var books = await _booksService.GetAllBooks();
+                return PartialView("~/Views/Shared/PartialViews/_BooksTable.cshtml", books);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error loading books table.");
+            }
+        }
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || id == 0)
@@ -47,7 +60,8 @@ namespace Application.Controllers
                     TempData["ErrorMessage"] = $"No book found with ID {id}.";
                     return View(AppConstants.NotFoundView);
                 }
-                return View(book);
+                //return View(book);
+                return PartialView("~/Views/Shared/PartialViews/_BooksDetails.cshtml", book);
             }
             catch (Exception ex)
             {
@@ -58,7 +72,8 @@ namespace Application.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            //return View();
+            return PartialView("~/Views/Shared/PartialViews/_BooksCreate.cshtml");
         }
 
         
@@ -74,7 +89,8 @@ namespace Application.Controllers
                     await _unitOfWork.SaveChanges();
 
                     TempData["SuccessMessage"] = $"{AppConstants.BookAddedSuccess}: {book.Title}.";
-                    return RedirectToAction(nameof(Index));
+                    //return RedirectToAction(nameof(Index));
+                    return Json(new { success = true });
                 }
                 catch (Exception ex)
                 {
@@ -82,7 +98,9 @@ namespace Application.Controllers
                     return View(book);
                 }
             }
-            return View(book);
+            //return View(book);
+            return PartialView("~/Views/Shared/PartialViews/_BooksCreate.cshtml", book);
+
         }
 
         [HttpGet]
@@ -101,7 +119,8 @@ namespace Application.Controllers
                     TempData["ErrorMessage"] = $"No book found with ID {id} for editing.";
                     return View(AppConstants.NotFoundView);
                 }
-                return View(book);
+                //return View(book);
+                return PartialView("~/Views/Shared/PartialViews/_BooksEdit.cshtml", book);
             }
             catch (Exception ex)
             {
@@ -139,7 +158,8 @@ namespace Application.Controllers
                     await _unitOfWork.SaveChanges();
 
                     TempData["SuccessMessage"] = $"Successfully updated the book: {book.Title}.";
-                    return RedirectToAction(nameof(Index));
+                    //return RedirectToAction(nameof(Index));
+                    return Json(new { success = true });
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
@@ -171,7 +191,8 @@ namespace Application.Controllers
                     TempData["ErrorMessage"] = $"No book found with ID {id} for deletion.";
                     return View(AppConstants.NotFoundView);
                 }
-                return View(book);
+                //return View(book);
+                return PartialView("~/Views/Shared/PartialViews/_BooksDelete.cshtml", book);
             }
             catch (Exception ex)
             {
@@ -196,7 +217,8 @@ namespace Application.Controllers
                 await _unitOfWork.SaveChanges();
 
                 TempData["SuccessMessage"] = $"Successfully deleted the book: {book.Title}.";
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index));
+                return Json(new { success = true });
             }
             catch (Exception ex)
             {

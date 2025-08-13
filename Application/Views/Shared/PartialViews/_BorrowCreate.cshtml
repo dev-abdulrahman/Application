@@ -4,13 +4,14 @@
     ViewData["Title"] = "Borrow Book";
 }
 
-<h2>Borrow Book</h2>
 <div class="card">
     <div class="card-header">
         <strong>@Model.BookTitle</strong>
     </div>
     <div class="card-body">
-        <form asp-action="Create" method="post">
+        <form id="modalForm" method="post" class="needs-validation"
+              data-ajax-url="@Url.Action(nameof(BorrowController.Create), nameof(BorrowController).Replace("Controller", ""))"
+              data-table-refresh-url="@Url.Action(nameof(BooksController.GetBooksTable), nameof(BooksController).Replace("Controller", ""))">
             <div asp-validation-summary="All" class="text-danger"></div>
 
             <input type="hidden" asp-for="BookId" />
@@ -34,8 +35,8 @@
                 <span asp-validation-for="Phone" class="text-danger"></span>
             </div>
 
-            <button type="submit" class="btn btn-primary"><i class="bi bi-check-circle"></i> Confirm Borrow</button>
-            <a asp-action="Index" asp-controller="Books" class="btn btn-secondary">Cancel</a>
+            @*  <button type="submit" class="btn btn-primary"><i class="bi bi-check-circle"></i> Confirm Borrow</button>
+                <a asp-action="Index" asp-controller="Books" class="btn btn-secondary">Cancel</a> *@
         </form>
     </div>
 </div>

@@ -47,7 +47,9 @@ namespace Application.Controllers
                     BookId = book.BookId,
                     BookTitle = book.Title
                 };
-                return View(borrowViewModel);
+                //return View(borrowViewModel);
+                return PartialView("~/Views/Shared/PartialViews/_BorrowCreate.cshtml", borrowViewModel);
+
             }
             catch (Exception ex)
             {
@@ -99,7 +101,8 @@ namespace Application.Controllers
                 await _unitOfWork.SaveChanges();
 
                 TempData["SuccessMessage"] = $"Successfully borrowed the book: {book.Title}.";
-                return RedirectToAction("Index", "Books");
+                //return RedirectToAction("Index", "Books");
+                return Json(new { success = true });
             }
             catch (Exception ex)
             {
@@ -136,7 +139,9 @@ namespace Application.Controllers
                     BorrowerName = borrowRecord.BorrowerName,
                     BorrowDate = borrowRecord.BorrowDate
                 };
-                return View(returnViewModel);
+                //return View(returnViewModel);
+                return PartialView("~/Views/Shared/PartialViews/_BorrowReturn.cshtml", returnViewModel);
+
             }
             catch (Exception ex)
             {
@@ -174,7 +179,8 @@ namespace Application.Controllers
                 await _unitOfWork.SaveChanges();
 
                 TempData["SuccessMessage"] = $"Successfully returned the book: {borrowRecord.Book.Title}.";
-                return RedirectToAction("Index", "Books");
+                //return RedirectToAction("Index", "Books");
+                return Json(new { success = true });
             }
             catch (Exception ex)
             {
